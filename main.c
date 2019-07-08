@@ -2,6 +2,7 @@
 #include "base.h"
 #include "ether.h"
 #include "log.h"
+#include "include/base.h"
 
 #include <sys/types.h>
 #include <ifaddrs.h>
@@ -42,6 +43,12 @@ void broadcast_packet(iface_info_t *iface, const char *packet, int len)
 {
 	// TODO: broadcast packet 
 	fprintf(stdout, "TODO: broadcast packet here.\n");
+    iface_info_t * pos = NULL;
+	list_for_each_entry(pos, instance->iface_list, list) {
+        if(pos->fd != iface->fd && pos->index != iface->index) {
+            iface_send_packet(pos, packet, len);
+        }
+    }
 }
 
 void handle_packet(iface_info_t *iface, char *packet, int len)
